@@ -24,7 +24,6 @@ public class GridPane extends JPanel {
         g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
         g2d.dispose();
 
-
         g2d = (Graphics2D) graphics.create();
         GridShape gridShape = new BaseGridShape(g2d, this);
 

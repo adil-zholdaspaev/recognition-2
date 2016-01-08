@@ -11,7 +11,7 @@ import java.awt.geom.GeneralPath;
 public class BaseGridShape implements GridShape {
 
     private final Graphics2D graphics2D;
-    private final int heigth;
+    private final int height;
     private final int width;
 
     private double x;
@@ -19,7 +19,7 @@ public class BaseGridShape implements GridShape {
 
     public BaseGridShape(final Graphics2D graphics2D, final JComponent jComponent) {
         this.graphics2D = graphics2D;
-        this.heigth = jComponent.getHeight();
+        this.height = jComponent.getHeight();
         this.width = jComponent.getWidth();
 
         x = 0;
@@ -63,6 +63,6 @@ public class BaseGridShape implements GridShape {
     }
 
     private double convertY(final double y) {
-        return ((heigth / 2) - y * 15);
+        return ((height / 2) - y * 15);
     }
 }
