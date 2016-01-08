@@ -1,6 +1,9 @@
 package net.omsu.recognition;
 
 import net.omsu.recognition.graphics.GridPane;
+import net.omsu.recognition.mnk.MathMethod;
+import net.omsu.recognition.mnk.distribution.UniformDistribution;
+import net.omsu.recognition.mnk.functions.SinFunction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +33,9 @@ public class Application {
                     e.printStackTrace();
                 }
 
-                GridPane gridPane = new GridPane();
-                gridPane.setPreferredSize(new Dimension(200, 200));
+                MathMethod mathMethod = new MathMethod(new SinFunction(), new UniformDistribution(10));
+                GridPane gridPane = new GridPane(mathMethod);
+                gridPane.setPreferredSize(new Dimension(500, 500));
 
                 JFrame frame = new JFrame("Testing");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,34 +46,4 @@ public class Application {
             }
         });
     }
-
-    public interface GridShape {
-        public void draw(Graphics2D g2d, JComponent parent);
-    }
-
-    public class WaveShape implements GridShape {
-
-        public void draw(Graphics2D g2d, JComponent parent) {
-            g2d.setColor(Color.RED);
-
-            int xDiff = parent.getWidth() / 4;
-            int height = parent.getHeight() - 1;
-
-            int xPos = 0;
-
-            GeneralPath path = new GeneralPath();
-            path.moveTo(0, 0);
-
-            path.curveTo(xPos + xDiff, 0, xPos, height, xPos + xDiff, height);
-            xPos += xDiff;
-            path.curveTo(xPos + xDiff, height, xPos, 0, xPos + xDiff, 0);
-            xPos += xDiff;
-            path.curveTo(xPos + xDiff, 0, xPos, height, xPos + xDiff, height);
-            xPos += xDiff;
-            path.curveTo(xPos + xDiff, height, xPos, 0, xPos + xDiff, 0);
-            g2d.draw(path);
-        }
-
-    }
-
 }
