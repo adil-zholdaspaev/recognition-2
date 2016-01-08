@@ -4,9 +4,10 @@ import net.omsu.recognition.graphics.GridShape;
 import net.omsu.recognition.mnk.distribution.Distribution;
 import net.omsu.recognition.mnk.functions.Function;
 import net.omsu.recognition.mnk.gauss.Algorithm;
-import net.omsu.recognition.mnk.gauss.Gauss;
 import net.omsu.recognition.mnk.gauss.LinearSystem;
 import net.omsu.recognition.mnk.gauss.MyEquation;
+
+import java.util.Random;
 
 /**
  *
@@ -14,14 +15,17 @@ import net.omsu.recognition.mnk.gauss.MyEquation;
 public class MathMethod {
 
     private static final int RANGE = 10;
-    private static final int DEGREE = 6;
+    private static final int DEGREE = 10;
     private static final int PARTS = 50;
+    private static final int PERSENT = 30;
 
     private final Function function;
+    private final Distribution xDistribution;
     private final Distribution distribution;
 
-    public MathMethod(final Function function, final Distribution distribution) {
+    public MathMethod(final Function function, final Distribution xDistribution, final Distribution distribution) {
         this.function = function;
+        this.xDistribution = xDistribution;
         this.distribution = distribution;
     }
 
@@ -39,10 +43,15 @@ public class MathMethod {
         double a[][] = new double[DEGREE][DEGREE];
         double b[] = new double[DEGREE];
 
+        Random random = new Random();
+
         for (int i = 0; i < PARTS; i++) {
 
-            double xi = distribution.calc();
-            double mistake = distribution.calc();
+            double xi = xDistribution.calc();
+            double mistake = 0;
+            if (random.nextInt(100) < PERSENT) {
+                mistake = distribution.calc();
+            }
             double yi = function.calc(xi) + mistake;
 
             gridShape.ellipse(xi, yi, 2);
@@ -55,7 +64,7 @@ public class MathMethod {
             }
         }
 
-        LinearSystem<Double, MyEquation> linearSystem = new LinearSystem<Double, MyEquation>();
+        LinearSystem<Double, MyEquation> linearSystem = new LinearSystem<>();
         for (int j = 0; j < DEGREE; j++) {
             MyEquation equation = new MyEquation();
             for (int k = 0; k < DEGREE; k++) {
@@ -65,7 +74,7 @@ public class MathMethod {
             linearSystem.push(equation);
         }
 
-        Algorithm<Double, MyEquation> algorithm = new Algorithm<Double, MyEquation>(linearSystem);
+        Algorithm<Double, MyEquation> algorithm = new Algorithm<>(linearSystem);
         algorithm.calculate();
 
         Double[] x = new Double[DEGREE];

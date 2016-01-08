@@ -33,7 +33,7 @@ public class Application {
                     e.printStackTrace();
                 }
 
-                MathMethod mathMethod = new MathMethod(new SinFunction(), new UniformDistribution(10));
+                MathMethod mathMethod = new MathMethod(new SinFunction(), new UniformDistribution(10), new UniformDistribution(1));
                 GridPane gridPane = new GridPane(mathMethod);
                 gridPane.setPreferredSize(new Dimension(500, 500));
 

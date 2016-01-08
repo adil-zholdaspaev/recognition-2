@@ -8,6 +8,6 @@ public class SinFunction implements Function {
     public SinFunction() {}
 
     public double calc(double x) {
-        return x * Math.sin(x);
+        return Math.sin(x);
     }
 }
