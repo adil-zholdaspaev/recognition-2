@@ -4,7 +4,7 @@ public class Algorithm<N extends Number, T extends Gauss<N, T>> {
     LinearSystem<N, T> list = null;
 
     public Algorithm(LinearSystem<N, T> system){
-            list = system;
+        list = system;
     }
 
     public void calculate() throws NullPointerException, ArithmeticException{
