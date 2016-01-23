@@ -1,9 +1,6 @@
 package net.omsu.recognition;
 
-import com.xeiam.xchart.Chart;
-import com.xeiam.xchart.ChartBuilder;
-import com.xeiam.xchart.QuickChart;
-import com.xeiam.xchart.SwingWrapper;
+import com.xeiam.xchart.*;
 import net.omsu.recognition.mnk.MathMethod;
 import net.omsu.recognition.mnk.distribution.UniformDistribution;
 import net.omsu.recognition.mnk.functions.SinFunction;
@@ -17,18 +14,23 @@ import java.util.List;
 public class Application {
 
     public static void main(String[] args) {
-        new Application();
+        Chart chart = new ChartBuilder().xAxisTitle("X").yAxisTitle("Y").width(600).height(400).build();
+        chart.getStyleManager().setMarkerSize(6);
+
+        searchFunction(chart);
+
+        SwingWrapper wrapper = new SwingWrapper(chart);
+        wrapper.displayChart();
     }
 
-    public Application() {
-        Chart chart = new ChartBuilder().xAxisTitle("X").yAxisTitle("Y").width(600).height(400).build();
+    private static void searchFunction(final Chart chart) {
 
-        MathMethod mathMethod = new MathMethod(new SinFunction(), new UniformDistribution(10), new UniformDistribution(1));
-
-        Pair<List<Double>, List<Double>> mainFunction = mathMethod.method();
-
+        MathMethod mathMethod = new MathMethod(
+                new SinFunction(),
+                new UniformDistribution(10),
+                new UniformDistribution(1)
+        );
+        Pair<List<Double>, List<Double>> mainFunction = mathMethod.searchFunction();
         chart.addSeries("sin(x)", mainFunction.getKey(), mainFunction.getValue());
-
-        new SwingWrapper(chart).displayChart();
     }
 }

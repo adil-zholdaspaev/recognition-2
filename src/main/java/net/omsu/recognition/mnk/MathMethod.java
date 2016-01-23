@@ -36,7 +36,7 @@ public class MathMethod {
         this.distribution = distribution;
     }
 
-    public Pair<List<Double>, List<Double>> method() {
+    public Pair<List<Double>, List<Double>> searchFunction() {
         final List<Double> arguments = new ArrayList<>();
         final List<Double> results = new ArrayList<>();
 
