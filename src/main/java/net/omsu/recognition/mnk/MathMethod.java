@@ -17,7 +17,7 @@ public class MathMethod {
     private static final int RANGE = 10;
     private static final int DEGREE = 10;
     private static final int PARTS = 50;
-    private static final int PERSENT = 30;
+    private static final int PERCENT = 30;
 
     private final Function function;
     private final Distribution xDistribution;
@@ -49,7 +49,7 @@ public class MathMethod {
 
             double xi = xDistribution.calc();
             double mistake = 0;
-            if (random.nextInt(100) < PERSENT) {
+            if (random.nextInt(100) < PERCENT) {
                 mistake = distribution.calc();
             }
             double yi = function.calc(xi) + mistake;
