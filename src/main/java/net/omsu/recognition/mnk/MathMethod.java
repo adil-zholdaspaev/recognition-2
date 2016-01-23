@@ -19,13 +19,15 @@ public class MathMethod {
     private static final int RANGE = 10;
     private static final double DELTA = 0.25;
 
-    private static final int DEGREE = 10;
+    private static final int DEGREE = 9;
     private static final int PARTS = 50;
     private static final int PERCENT = 30;
 
     private final Function<Double, Double> function;
     private final Supplier<Double> xDistribution;
     private final Supplier<Double> distribution;
+
+    private LinearSystem<Double, MyEquation> linearSystem;
 
     public MathMethod(final Function<Double, Double> function,
                       final Supplier<Double> xDistribution,
@@ -48,11 +50,14 @@ public class MathMethod {
         return new Pair<>(arguments, results);
     }
 
-    public void solveLinearEquations() {
+    public Pair<List<Double>, List<Double>> buildLinearEquation() {
         double a[][] = new double[DEGREE][DEGREE];
         double b[] = new double[DEGREE];
 
         Random random = new Random();
+
+        List<Double> arguments = new ArrayList<>();
+        List<Double> results = new ArrayList<>();
 
         for (int i = 0; i < PARTS; i++) {
 
@@ -63,17 +68,18 @@ public class MathMethod {
             }
             double yi = function.apply(xi) + mistake;
 
-            //gridShape.ellipse(xi, yi, 2);
-
             for (int j = 0; j < DEGREE; j++) {
                 for (int k = 0; k < DEGREE; k++) {
                     a[j][k] += Math.pow(xi, (j + k));
                 }
                 b[j] += yi * Math.pow(xi, j);
             }
+
+            arguments.add(xi);
+            results.add(yi);
         }
 
-        LinearSystem<Double, MyEquation> linearSystem = new LinearSystem<>();
+        linearSystem = new LinearSystem<>();
         for (int j = 0; j < DEGREE; j++) {
             MyEquation equation = new MyEquation();
             for (int k = 0; k < DEGREE; k++) {
@@ -83,6 +89,10 @@ public class MathMethod {
             linearSystem.push(equation);
         }
 
+        return new Pair<>(arguments, results);
+    }
+
+    public Pair<List<Double>, List<Double>> solveLinearEquations() {
         Algorithm<Double, MyEquation> algorithm = new Algorithm<>(linearSystem);
         algorithm.calculate();
 
@@ -95,20 +105,23 @@ public class MathMethod {
             x[i] = (linearSystem.itemAt(i, linearSystem.size()) - sum) / linearSystem.itemAt(i, i);
         }
 
-
         double y = 0;
         for (int k = 0; k < DEGREE; k++) {
             y += x[k] * Math.pow(-RANGE, (double) k);
         }
 
-        //gridShape.moveTo(-RANGE, y);
+        List<Double> arguments = new ArrayList<>();
+        List<Double> results = new ArrayList<>();
 
         for (int i = -RANGE; i < RANGE; i++) {
             y = 0;
             for (int k = 0; k < DEGREE; k++) {
                 y += x[k] * Math.pow(i, (double) k);
             }
-            //gridShape.lineTo(i, y);
+            arguments.add((double) i);
+            results.add(y);
         }
+
+        return new Pair<>(arguments, results);
     }
 }
