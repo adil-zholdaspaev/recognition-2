@@ -1,13 +1,15 @@
 package net.omsu.recognition.mnk;
 
-import net.omsu.recognition.graphics.GridShape;
-import net.omsu.recognition.mnk.distribution.Distribution;
-import net.omsu.recognition.mnk.functions.Function;
 import net.omsu.recognition.mnk.gauss.Algorithm;
 import net.omsu.recognition.mnk.gauss.LinearSystem;
 import net.omsu.recognition.mnk.gauss.MyEquation;
+import org.apache.commons.math3.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  *
@@ -15,31 +17,38 @@ import java.util.Random;
 public class MathMethod {
 
     private static final int RANGE = 10;
+    private static final double DELTA = 0.25;
+
     private static final int DEGREE = 10;
     private static final int PARTS = 50;
     private static final int PERCENT = 30;
 
-    private final Function function;
-    private final Distribution xDistribution;
-    private final Distribution distribution;
+    private final Function<Double, Double> function;
+    private final Supplier<Double> xDistribution;
+    private final Supplier<Double> distribution;
 
-    public MathMethod(final Function function, final Distribution xDistribution, final Distribution distribution) {
+    public MathMethod(final Function<Double, Double> function,
+                      final Supplier<Double> xDistribution,
+                      final Supplier<Double> distribution) {
+
         this.function = function;
         this.xDistribution = xDistribution;
         this.distribution = distribution;
     }
 
-    public void method(final GridShape gridShape) {
+    public Pair<List<Double>, List<Double>> method() {
+        final List<Double> arguments = new ArrayList<>();
+        final List<Double> results = new ArrayList<>();
 
-        gridShape.moveTo(-RANGE, function.calc(-RANGE));
-        for (int x = -RANGE; x <= RANGE; x++) {
-            double y = function.calc(x);
-
-            gridShape.lineTo(x, y);
+        for (double x = -RANGE; x <= RANGE; x += DELTA) {
+            arguments.add(x);
+            results.add(function.apply(x));
         }
+
+        return new Pair<>(arguments, results);
     }
 
-    public void solveLinearEquations(final GridShape gridShape) {
+    public void solveLinearEquations() {
         double a[][] = new double[DEGREE][DEGREE];
         double b[] = new double[DEGREE];
 
@@ -47,14 +56,14 @@ public class MathMethod {
 
         for (int i = 0; i < PARTS; i++) {
 
-            double xi = xDistribution.calc();
+            double xi = xDistribution.get();
             double mistake = 0;
             if (random.nextInt(100) < PERCENT) {
-                mistake = distribution.calc();
+                mistake = distribution.get();
             }
-            double yi = function.calc(xi) + mistake;
+            double yi = function.apply(xi) + mistake;
 
-            gridShape.ellipse(xi, yi, 2);
+            //gridShape.ellipse(xi, yi, 2);
 
             for (int j = 0; j < DEGREE; j++) {
                 for (int k = 0; k < DEGREE; k++) {
@@ -92,14 +101,14 @@ public class MathMethod {
             y += x[k] * Math.pow(-RANGE, (double) k);
         }
 
-        gridShape.moveTo(-RANGE, y);
+        //gridShape.moveTo(-RANGE, y);
 
         for (int i = -RANGE; i < RANGE; i++) {
             y = 0;
             for (int k = 0; k < DEGREE; k++) {
                 y += x[k] * Math.pow(i, (double) k);
             }
-            gridShape.lineTo(i, y);
+            //gridShape.lineTo(i, y);
         }
     }
 }

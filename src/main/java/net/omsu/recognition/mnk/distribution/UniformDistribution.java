@@ -2,10 +2,12 @@ package net.omsu.recognition.mnk.distribution;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 
+import java.util.function.Supplier;
+
 /**
  *
  */
-public class UniformDistribution implements Distribution {
+public class UniformDistribution implements Supplier<Double> {
 
     private final UniformRealDistribution distribution;
 
@@ -13,7 +15,8 @@ public class UniformDistribution implements Distribution {
         this.distribution = new UniformRealDistribution(-range, range);
     }
 
-    public double calc() {
+    @Override
+    public Double get() {
         return distribution.sample();
     }
 }
