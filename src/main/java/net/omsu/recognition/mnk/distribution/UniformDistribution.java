@@ -11,7 +11,7 @@ public class UniformDistribution implements Supplier<Double> {
 
     private final UniformRealDistribution distribution;
 
-    public UniformDistribution(final int range) {
+    public UniformDistribution(final double range) {
         this.distribution = new UniformRealDistribution(-range, range);
     }
 

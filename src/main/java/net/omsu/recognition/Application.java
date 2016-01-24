@@ -6,6 +6,7 @@ import net.omsu.recognition.mnk.distribution.UniformDistribution;
 import net.omsu.recognition.mnk.functions.SinFunction;
 import org.apache.commons.math3.util.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,16 +20,19 @@ public class Application {
 
         MathMethod method = new MathMethod(
                 new SinFunction(),
-                new UniformDistribution(10),
-                new UniformDistribution(1)
+                new UniformDistribution(8),
+                new UniformDistribution(0.1)
         );
 
         searchFunction(chart, method);
-        linearEquation(chart, method);
+        Chart chart2 = linearEquation(method);
         solveLinearEquation(chart, method);
 
-        SwingWrapper wrapper = new SwingWrapper(chart);
-        wrapper.displayChart();
+        List<Chart> charts = new ArrayList<>();
+        charts.add(chart);
+        charts.add(chart2);
+
+        new SwingWrapper(charts).displayChartMatrix();
     }
 
     private static void searchFunction(final Chart chart, final MathMethod method) {
@@ -37,10 +41,14 @@ public class Application {
         chart.addSeries("sin(x)", values.getKey(), values.getValue());
     }
 
-    private static void linearEquation(final Chart chart, final MathMethod method) {
+    private static Chart linearEquation(final MathMethod method) {
 
         Pair<List<Double>, List<Double>> values = method.buildLinearEquation();
-        //chart.addSeries("sd", values.getKey(), values.getValue());
+
+        Chart chart = new ChartBuilder().xAxisTitle("X").yAxisTitle("Y").width(600).height(400).build();
+        chart.getStyleManager().setChartType(StyleManager.ChartType.Scatter);
+        chart.addSeries("sd", values.getKey(), values.getValue());
+        return chart;
     }
 
     private static void solveLinearEquation(final Chart chart, final MathMethod method) {
