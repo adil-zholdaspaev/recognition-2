@@ -20,8 +20,8 @@ public class Application {
 
         MathMethod method = new MathMethod(
                 new SinFunction(),
-                new UniformDistribution(8),
-                new UniformDistribution(0.1)
+                new UniformDistribution(5),
+                new UniformDistribution(0.5)
         );
 
         searchFunction(chart, method);

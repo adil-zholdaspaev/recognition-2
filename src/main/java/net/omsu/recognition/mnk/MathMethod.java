@@ -16,11 +16,11 @@ import java.util.function.Supplier;
  */
 public class MathMethod {
 
-    private static final int RANGE = 8;
+    private static final int RANGE = 5;
     private static final double DELTA = 0.25;
 
-    private static final int DEGREE = 10;
-    private static final int PARTS = 20;
+    private static final int DEGREE = 6;
+    private static final int PARTS = 500;
     private static final int PERCENT = 30;
 
     private final Function<Double, Double> function;
