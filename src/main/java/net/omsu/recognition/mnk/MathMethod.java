@@ -105,16 +105,11 @@ public class MathMethod {
             x[i] = (linearSystem.itemAt(i, linearSystem.size()) - sum) / linearSystem.itemAt(i, i);
         }
 
-        double y = 0;
-        for (int k = 0; k < DEGREE; k++) {
-            y += x[k] * Math.pow(-RANGE, (double) k);
-        }
-
         List<Double> arguments = new ArrayList<>();
         List<Double> results = new ArrayList<>();
 
         for (int i = -RANGE; i < RANGE; i++) {
-            y = 0;
+            double y = 0;
             for (int k = 0; k < DEGREE; k++) {
                 y += x[k] * Math.pow(i, (double) k);
             }
