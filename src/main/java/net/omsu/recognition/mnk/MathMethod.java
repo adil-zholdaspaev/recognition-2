@@ -18,6 +18,7 @@ public class MathMethod {
 
     private static final int RANGE = 5;
     private static final double DELTA = 0.25;
+    private static final double OFFSET = 0.001;
 
     private static final int DEGREE = 6;
     private static final int PARTS = 500;
@@ -71,6 +72,10 @@ public class MathMethod {
             for (int j = 0; j < DEGREE; j++) {
                 for (int k = 0; k < DEGREE; k++) {
                     a[j][k] += Math.pow(xi, (j + k));
+
+                    if (j == k) {
+                        a[j][k] += OFFSET;
+                    }
                 }
                 b[j] += yi * Math.pow(xi, j);
             }
