@@ -9,6 +9,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 /**
@@ -27,6 +28,7 @@ public class Application {
 
         List<Chart> charts = new ArrayList<>();
 
+        List<Double> errors = new ArrayList<>();
         for (int degree = 3; degree < 8; degree++) {
             Context context = new Context(degree);
 
@@ -36,10 +38,20 @@ public class Application {
             searchFunction(defaultChart, method);
             linearEquation(distributionChart, method, context);
             solveLinearEquation(defaultChart, method, context);
+            double error = calculateError(function, context);
+            errors.add(error);
 
             charts.add(defaultChart);
             charts.add(distributionChart);
         }
+        double minError = errors.stream().min(Double::compareTo).get();
+        final AtomicInteger count = new AtomicInteger(3);
+        errors.forEach(error -> {
+            if (error.equals(minError)) {
+                System.out.println(count.get());
+            }
+            count.incrementAndGet();
+        });
 
         new SwingWrapper(charts).displayChartMatrix();
     }
@@ -62,6 +74,20 @@ public class Application {
 
         String title = String.format("Degree %d", context.getDegree());
         chart.addSeries(title, context.getResultDistribution().getKey(), context.getResultDistribution().getValue());
+    }
+
+    private static double calculateError(Function<Double, Double> function, Context context) {
+        double error = 0;
+        List<Double> arguments = context.getResultDistribution().getKey();
+        List<Double> results = context.getResultDistribution().getValue();
+
+        for (int i = 0; i < arguments.size(); i++) {
+            double originalValue = function.apply(arguments.get(i));
+            double resultValue = results.get(i);
+
+            error += Math.abs(originalValue - resultValue);
+        }
+        return error / arguments.size();
     }
 
     private static Chart chartBuilder() {
